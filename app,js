@@ -1,0 +1,244 @@
+/* ====== Configurable ====== */
+const STORE = {
+  name: "MagicCased",
+  currency: "MXN", // cambia si lo necesitas (p. ej. "EUR", "USD", "ARS", "COP", "CLP")
+  locale: "es-MX",
+  freeShippingMin: 800,
+  whatsappNumber: "", // opcional: "5215555555555" (con país). Si está vacío, se abrirá WhatsApp sin destinatario.
+};
+
+/* Productos de ejemplo: reemplaza por los tuyos */
+const PRODUCTS = [
+  {
+    id: "funda-transparente",
+    name: "Funda Transparente",
+    price: 24900, // centavos
+    tag: "nuevo",
+    models: ["iPhone 12/12 Pro", "iPhone 13/13 Pro", "Samsung S23"],
+    description: "Ultraligera, antiamarillamiento y compatible con carga inalámbrica.",
+    imageAlt: "Funda transparente para celular",
+  },
+  {
+    id: "funda-antigolpes",
+    name: "Funda Antigolpes",
+    price: 34900,
+    tag: "top ventas",
+    models: ["iPhone 14", "Samsung S23", "Xiaomi 12"],
+    description: "Bordes reforzados y esquinas con absorción de impactos.",
+    imageAlt: "Funda antigolpes con esquinas reforzadas",
+  },
+  {
+    id: "funda-biodegradable",
+    name: "Funda Biodegradable",
+    price: 39900,
+    tag: "eco",
+    models: ["iPhone 13", "iPhone 14", "Samsung A54"],
+    description: "Material a base de biopolímeros, acabado suave al tacto.",
+    imageAlt: "Funda biodegradable color arena",
+  },
+  {
+    id: "funda-marmol",
+    name: "Funda Mármol",
+    price: 29900,
+    tag: "edición",
+    models: ["iPhone 11", "iPhone 12", "Samsung S22"],
+    description: "Estampado mármol minimalista, resistente a rayones.",
+    imageAlt: "Funda con patrón de mármol",
+  },
+  {
+    id: "funda-matea",
+    name: "Funda Mate Antihuellas",
+    price: 28900,
+    tag: "",
+    models: ["iPhone 15", "Samsung S24"],
+    description: "Acabado mate premium que repele huellas y polvo.",
+    imageAlt: "Funda mate negra",
+  },
+  {
+    id: "funda-cuerda",
+    name: "Funda con Cuerda",
+    price: 36900,
+    tag: "manos libres",
+    models: ["iPhone 12", "iPhone 13"],
+    description: "Cordón ajustable para llevar al hombro o cruzada.",
+    imageAlt: "Funda con cuerda ajustable",
+  },
+];
+
+/* ====== Utilidades ====== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const fmt = new Intl.NumberFormat(STORE.locale, { style: "currency", currency: STORE.currency });
+const money = cents => fmt.format(cents / 100);
+const unique = arr => [...new Set(arr)];
+
+/* ====== Estado ====== */
+let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+let filters = { q: "", model: "", sort: "pop" };
+
+/* ====== Render ====== */
+function renderProducts() {
+  const grid = $("#grid");
+  const q = filters.q.trim().toLowerCase();
+  let items = PRODUCTS.filter(p => {
+    const matchesQ = !q || [p.name, p.description, p.tag].join(" ").toLowerCase().includes(q);
+    const matchesModel = !filters.model || p.models.includes(filters.model);
+    return matchesQ && matchesModel;
+  });
+
+  if (filters.sort === "priceAsc") items.sort((a,b)=>a.price-b.price);
+  if (filters.sort === "priceDesc") items.sort((a,b)=>b.price-a.price);
+
+  grid.innerHTML = items.map(p => cardHTML(p)).join("");
+  $("#emptyState").hidden = items.length > 0;
+
+  // add listeners
+  $$("#grid .add").forEach(btn => btn.addEventListener("click", onAddToCart));
+}
+
+function cardHTML(p) {
+  return `
+  <article class="card" data-id="${p.id}">
+    <div class="thumb" role="img" aria-label="${p.imageAlt}">
+      ${p.tag ? `<span class="badge-tag">${p.tag}</span>` : ""}
+    </div>
+    <div class="card-body">
+      <h3>${p.name}</h3>
+      <p>${p.description}</p>
+      <div class="meta">
+        <span class="price">${money(p.price)}</span>
+        <span class="muted">${p.models[0]}${p.models.length>1?` · +${p.models.length-1}`:""}</span>
+      </div>
+      <div class="actions">
+        ${modelSelectHTML(p)}
+        <button class="btn add" data-id="${p.id}">Añadir</button>
+      </div>
+    </div>
+  </article>`;
+}
+
+function modelSelectHTML(p) {
+  const id = `m-${p.id}`;
+  const options = p.models.map(m => `<option value="${m}">${m}</option>`).join("");
+  return `<select id="${id}" aria-label="Seleccionar modelo">${options}</select>`;
+}
+
+function renderCart() {
+  $("#cartList").innerHTML = cart.length ? cart.map(item => cartItemHTML(item)).join("") : `<p class="muted">Tu carrito está vacío.</p>`;
+  const subtotal = cart.reduce((acc, it) => acc + it.price * it.qty, 0);
+  $("#cartSubtotal").textContent = money(subtotal);
+  $("#cartTotal").textContent = money(subtotal);
+  $("#cartCount").textContent = cart.reduce((acc, it) => acc + it.qty, 0);
+
+  // eventos cantidad / remover
+  $$(".qty .inc").forEach(b => b.addEventListener("click", () => changeQty(b.dataset.id, +1)));
+  $$(".qty .dec").forEach(b => b.addEventListener("click", () => changeQty(b.dataset.id, -1)));
+  $$(".remove").forEach(b => b.addEventListener("click", () => removeFromCart(b.dataset.id)));
+}
+
+function cartItemHTML(it) {
+  return `
+  <div class="cart-item">
+    <div class="cart-thumb" aria-hidden="true"></div>
+    <div>
+      <h4>${it.name}</h4>
+      <div class="muted" style="font-size:13px">Modelo: ${it.model}</div>
+      <div class="muted" style="font-size:13px">${money(it.price)} c/u</div>
+      <div class="qty" style="margin-top:6px">
+        <button class="dec" data-id="${it.key}" aria-label="Disminuir cantidad">−</button>
+        <span aria-live="polite">${it.qty}</span>
+        <button class="inc" data-id="${it.key}" aria-label="Aumentar cantidad">+</button>
+      </div>
+    </div>
+    <div style="text-align:right">
+      <strong>${money(it.price * it.qty)}</strong><br/>
+      <button class="link remove" data-id="${it.key}">Quitar</button>
+    </div>
+  </div>`;
+}
+
+/* ====== Acciones carrito ====== */
+function onAddToCart(e) {
+  const id = e.currentTarget.dataset.id;
+  const p = PRODUCTS.find(x => x.id === id);
+  const model = $(`#m-${id}`).value;
+  const key = `${id}-${model}`;
+  const existing = cart.find(i => i.key === key);
+  if (existing) existing.qty += 1;
+  else cart.push({ key, id, name: p.name, model, price: p.price, qty: 1 });
+  persist();
+  renderCart();
+  openDrawer(true);
+}
+
+function changeQty(key, delta) {
+  const it = cart.find(i => i.key === key);
+  if (!it) return;
+  it.qty += delta;
+  if (it.qty <= 0) cart = cart.filter(x => x.key !== key);
+  persist(); renderCart();
+}
+
+function removeFromCart(key) {
+  cart = cart.filter(x => x.key !== key);
+  persist(); renderCart();
+}
+
+function persist() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+/* ====== Drawer ====== */
+const drawer = $("#drawer");
+const openBtn = $("#openCart");
+const closeBtn = $("#closeCart");
+const backdrop = $("#drawerBackdrop");
+
+function openDrawer(force) {
+  const show = force ?? drawer.getAttribute("aria-hidden") === "true";
+  drawer.setAttribute("aria-hidden", show ? "false" : "true");
+  if (show) $("#closeCart").focus();
+}
+openBtn.addEventListener("click", () => openDrawer(true));
+closeBtn.addEventListener("click", () => openDrawer(false));
+backdrop.addEventListener("click", () => openDrawer(false));
+
+/* ====== Checkout WhatsApp ====== */
+$("#checkout").addEventListener("click", () => {
+  if (!cart.length) return;
+  const lines = cart.map(it => `• ${it.name} (${it.model}) x${it.qty} — ${money(it.price * it.qty)}`);
+  const total = cart.reduce((acc, it) => acc + it.price * it.qty, 0);
+  const msg =
+    `Hola, quiero hacer este pedido:\n${lines.join("\n")}\n\nTotal: ${money(total)}\n` +
+    `Nombre:\nDirección de envío:\nMétodo de pago:\n`;
+  const base = STORE.whatsappNumber ? `https://wa.me/${STORE.whatsappNumber}?text=` : `https://wa.me/?text=`;
+  window.open(base + encodeURIComponent(msg), "_blank");
+});
+
+/* ====== Filtros, orden, modelo ====== */
+$("#q").addEventListener("input", e => { filters.q = e.target.value; renderProducts(); });
+$("#sort").addEventListener("change", e => { filters.sort = e.target.value; renderProducts(); });
+$("#filterModel").addEventListener("change", e => { filters.model = e.target.value; renderProducts(); });
+
+/* Poblamos select de modelos basado en productos */
+function populateModels() {
+  const all = unique(PRODUCTS.flatMap(p => p.models));
+  $("#filterModel").innerHTML = ['<option value="">Modelo (todos)</option>', ...all.map(m => `<option value="${m}">${m}</option>`)].join("");
+}
+
+/* ====== Init ====== */
+(function init() {
+  $("#year").textContent = new Date().getFullYear();
+  populateModels();
+  renderProducts();
+  renderCart();
+  // “envío gratis” copy dinámico
+  if (STORE.freeShippingMin) {
+    const footer = document.querySelector(".site-footer small");
+    footer.innerHTML = footer.innerHTML.replace("$800", money(STORE.freeShippingMin));
+  }
+  // Link de WhatsApp en sección contacto con número si está configurado
+  if (STORE.whatsappNumber) {
+    $("#whatsappLink").href = `https://wa.me/${STORE.whatsappNumber}`;
+  }
+})();

@@ -1,0 +1,110 @@
+:root {
+    --bg: #ffffff;
+    --text: #111111;
+    --muted: #6b7280;
+    --card: #f5f5f5;
+    --accent: #111111; /* cambia este color para tu marca */
+    --radius: 12px;
+    --shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.06);
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1115;
+      --text: #f5f5f5;
+      --muted: #a3a3a3;
+      --card: #171922;
+      --accent: #f5f5f5;
+    }
+  }
+  
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Noto Sans, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+  .site-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .brand { font-weight: 700; letter-spacing: .08em; text-decoration: none; color: var(--text); font-size: 18px; }
+  .nav { display: flex; align-items: center; gap: 16px; }
+  .nav a { color: var(--text); opacity: .8; text-decoration: none; }
+  .nav a:hover { opacity: 1; }
+  .icon-btn { background: transparent; border: 1px solid transparent; padding: 8px 10px; border-radius: 999px; cursor: pointer; position: relative; }
+  .icon-btn:hover { background: rgba(127,127,127,.08); }
+  .badge { position: absolute; top: -4px; right: -4px; background: var(--accent); color: var(--bg); border-radius: 999px; padding: 2px 6px; font-size: 12px; }
+  
+  .hero { padding: 72px 24px 40px; text-align: center; }
+  .hero h1 { font-size: clamp(28px, 2.2vw + 18px, 40px); margin: 0 0 8px; }
+  .hero p { color: var(--muted); margin: 0 0 20px; }
+  .cta {
+    display: inline-block; padding: 12px 18px; border-radius: 999px;
+    background: var(--text); color: var(--bg); text-decoration: none; border: 1px solid var(--text);
+  }
+  .cta:hover { filter: brightness(0.95); }
+  .cta.full { width: 100%; text-align: center; }
+  
+  .toolbar {
+    display: grid; gap: 10px; grid-template-columns: 1fr 180px 180px;
+    position: sticky; top: 0; background: var(--bg); padding: 8px 0 16px; z-index: 5;
+  }
+  .toolbar input, .toolbar select {
+    width: 100%; padding: 12px 14px; border-radius: 999px; border: 1px solid #e5e7eb; background: transparent; color: var(--text);
+  }
+  .toolbar select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--text) 50%), linear-gradient(135deg, var(--text) 50%, transparent 50%); background-position: calc(100% - 20px) calc(1em + 4px), calc(100% - 15px) calc(1em + 4px); background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; padding-right: 36px; }
+  @media (max-width: 800px) { .toolbar { grid-template-columns: 1fr; position: static; } }
+  
+  .grid { display: grid; gap: 18px; grid-template-columns: repeat(3, 1fr); margin-top: 10px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr);} }
+  @media (max-width: 580px) { .grid { grid-template-columns: 1fr; } }
+  
+  .card {
+    background: var(--card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
+    display: grid; grid-template-rows: 220px auto; transition: transform .2s ease;
+  }
+  .card:hover { transform: translateY(-2px); }
+  .thumb { position: relative; background: conic-gradient(from 180deg at 50% 50%, #e5e7eb, #f3f4f6, #e5e7eb); }
+  .badge-tag {
+    position: absolute; left: 12px; top: 12px; background: rgba(0,0,0,.7); color: #fff;
+    font-size: 12px; padding: 4px 8px; border-radius: 999px;
+  }
+  .card-body { padding: 14px; display: grid; gap: 6px; align-content: start; }
+  .card h3 { margin: 0; font-size: 16px; }
+  .card p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.4; }
+  .card .meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 4px; }
+  .price { font-weight: 700; }
+  .card .actions { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 10px; }
+  .btn { padding: 10px 12px; border-radius: 10px; border: 1px solid var(--text); background: transparent; color: var(--text); cursor: pointer; }
+  .btn:hover { background: rgba(127,127,127,.08); }
+  .link { background: transparent; border: 0; color: var(--text); text-decoration: underline; cursor: pointer; padding: 8px 0; }
+  .link.full { width: 100%; text-align: center; }
+  .muted { color: var(--muted); }
+  
+  .contacto .links { display: flex; gap: 14px; flex-wrap: wrap; }
+  .contacto .link { text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 2px; }
+  
+  .site-footer { margin-top: 40px; padding-bottom: 40px; color: var(--muted); }
+  
+  .drawer { position: fixed; inset: 0; display: none; }
+  .drawer[aria-hidden="false"] { display: grid; grid-template-columns: 1fr; }
+  .drawer__backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.35); border: 0; }
+  .drawer__panel {
+    position: relative; margin-left: auto; height: 100%; width: min(440px, 100%); background: var(--bg);
+    box-shadow: -10px 0 30px rgba(0,0,0,.2); display: grid; grid-template-rows: auto 1fr auto;
+  }
+  .drawer__header { display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid #e5e7eb; }
+  .cart-list { padding: 16px; display: grid; gap: 14px; overflow: auto; }
+  .cart-item { display: grid; grid-template-columns: 64px 1fr auto; gap: 10px; align-items: center; }
+  .cart-thumb { width: 64px; height: 64px; border-radius: 10px; background: linear-gradient(135deg, #eee, #ddd); }
+  .cart-item h4 { margin: 0; font-size: 14px; }
+  .qty { display: inline-flex; gap: 8px; align-items: center; }
+  .qty button { width: 28px; height: 28px; border-radius: 8px; border: 1px solid #e5e7eb; background: transparent; cursor: pointer; }
+  .cart-summary { border-top: 1px solid #e5e7eb; padding: 16px; display: grid; gap: 10px; }
+  .cart-summary .row { display: flex; justify-content: space-between; align-items: center; }
+  .cart-summary .total { font-size: 18px; }
+  

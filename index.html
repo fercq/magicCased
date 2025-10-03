@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MagicCased · Accesesorios para iPhone</title>
+  <meta name="description" content="Fundas para celular personalizadas y resistentes. Envíos a todo el país." />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:title" content="MagicCased · Accesorios para iPhone" />
+  <meta property="og:description" content="Fundas para celular minimalistas y resistentes. Envíos a todo el país." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/og.jpg" />
+
+  <link rel="icon" href="assets/favicon.svg" />
+  <link rel="preload" href="styles.css" as="style" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header container">
+    <a class="brand" href="#" aria-label="Inicio">MagicCased</a>
+    <nav class="nav">
+      <a href="#tienda">Tienda</a>
+      <a href="#contacto">Contacto</a>
+      <button id="openCart" class="icon-btn" aria-label="Abrir carrito" title="Carrito">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.45A1.99 1.99 0 0 0 10 19h10v-2H10.42a.25.25 0 0 1-.22-.37L11 14h6a2 2 0 0 0 1.8-1.1l3.58-7.16A1 1 0 0 0 21.5 4h-14.3l-.2-.4A2 2 0 0 0 5.2 3H2v2h2.2l3.1 6.2-.95 1.73A2 2 0 0 0 8 16h12v-2H8.76l.9-1.63L7 6z"/>
+        </svg>
+        <span id="cartCount" class="badge" aria-live="polite">0</span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <h1>Fundas para celular — minimalistas y resistentes</h1>
+      <p>Protege tu teléfono con estilo. Envíos a todo el país.</p>
+      <a href="#tienda" class="cta">Ver catálogo</a>
+    </section>
+
+    <section id="tienda" class="container">
+      <div class="toolbar">
+        <input id="q" type="search" placeholder="Buscar (p. ej. transparente, antigolpes…)" aria-label="Buscar productos" />
+        <select id="filterModel" aria-label="Filtrar por modelo">
+          <option value="">Modelo (todos)</option>
+        </select>
+        <select id="sort" aria-label="Ordenar">
+          <option value="pop">Ordenar: popular</option>
+          <option value="priceAsc">Precio: menor a mayor</option>
+          <option value="priceDesc">Precio: mayor a menor</option>
+        </select>
+      </div>
+
+      <div id="grid" class="grid" aria-live="polite"></div>
+      <p id="emptyState" class="muted" hidden>No encontramos resultados. Intenta ajustar la búsqueda o filtros.</p>
+    </section>
+
+    <section id="contacto" class="container contacto">
+      <h2>¿Necesitas ayuda?</h2>
+      <p>Escríbenos por WhatsApp o Instagram.</p>
+      <div class="links">
+        <a id="whatsappLink" class="link" href="https://wa.me/?text=Hola%20quiero%20informaci%C3%B3n%20sobre%20sus%20fundas" rel="noopener">WhatsApp</a>
+        <a class="link" href="https://instagram.com/" target="_blank" rel="noopener">Instagram</a>
+        <a class="link" href="mailto:magiccased@gmail.com">magiccased@gmail.com</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer container">
+    <small>© <span id="year"></span> MagicCased. Envío gratis en pedidos desde $800. Hecho con ❤️</small>
+  </footer>
+
+  <!-- Carrito (drawer) -->
+  <div id="drawer" class="drawer" aria-hidden="true" role="dialog" aria-label="Carrito">
+    <div class="drawer__panel">
+      <header class="drawer__header">
+        <h3>Tu carrito</h3>
+        <button id="closeCart" class="icon-btn" aria-label="Cerrar carrito">✕</button>
+      </header>
+      <div id="cartList" class="cart-list"></div>
+      <div class="cart-summary">
+        <div class="row"><span>Subtotal</span><strong id="cartSubtotal">$0</strong></div>
+        <div class="row"><span>Envío</span><span class="muted">Se coordina por WhatsApp</span></div>
+        <div class="row total"><span>Total</span><strong id="cartTotal">$0</strong></div>
+        <button id="checkout" class="cta full">Finalizar por WhatsApp</button>
+        <button id="clearCart" class="link full">Vaciar carrito</button>
+      </div>
+    </div>
+    <button id="drawerBackdrop" class="drawer__backdrop" aria-hidden="true" tabindex="-1"></button>
+  </div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
