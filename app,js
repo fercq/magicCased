@@ -3,8 +3,8 @@ const STORE = {
   name: "MagicCased",
   currency: "MXN", // cambia si lo necesitas (p. ej. "EUR", "USD", "ARS", "COP", "CLP")
   locale: "es-MX",
-  freeShippingMin: 800,
-  whatsappNumber: "", // opcional: "5215555555555" (con país). Si está vacío, se abrirá WhatsApp sin destinatario.
+  freeShippingMin: 600,
+  whatsappNumber: "528443287544", // opcional: "5215555555555" (con país). Si está vacío, se abrirá WhatsApp sin destinatario.
 };
 
 /* Productos de ejemplo: reemplaza por los tuyos */
