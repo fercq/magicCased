@@ -116,10 +116,17 @@
   display: block;
 }
 
-/* Grid destacado: se adapta a 1–2 columnas según el ancho */
-.grid--featured {
-  margin: 8px 0 12px;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+/* Grilla de tarjetas */
+.grid { display: grid; gap: 18px; grid-template-columns: repeat(3, 1fr); margin-top: 10px; }
+
+/* Tablet/Laptop angosto: 2 columnas */
+@media (max-width: 900px) { 
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Móvil: mantenemos 2 columnas (antes era 1) */
+@media (max-width: 580px) { 
+  .grid { grid-template-columns: repeat(2, 1fr); }
 }
 
   
