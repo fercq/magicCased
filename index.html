@@ -13,22 +13,28 @@
   <meta property="og:image" content="assets/og.jpg" />
 
   <link rel="icon" href="assets/favicon.svg" />
+  <!-- Space Grotesk font for header -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="preload" href="styles.css" as="style" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="site-header container">
-    <a class="brand" href="#" aria-label="Inicio">MagicCased</a>
-    <nav class="nav">
-      <a href="#tienda">Tienda</a>
-      <a href="#contacto">Contacto</a>
-      <button id="openCart" class="icon-btn" aria-label="Abrir carrito" title="Carrito">
-        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.45A1.99 1.99 0 0 0 10 19h10v-2H10.42a.25.25 0 0 1-.22-.37L11 14h6a2 2 0 0 0 1.8-1.1l3.58-7.16A1 1 0 0 0 21.5 4h-14.3l-.2-.4A2 2 0 0 0 5.2 3H2v2h2.2l3.1 6.2-.95 1.73A2 2 0 0 0 8 16h12v-2H8.76l.9-1.63L7 6z"/>
-        </svg>
-        <span id="cartCount" class="badge" aria-live="polite">0</span>
-      </button>
-    </nav>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="#" aria-label="Inicio">MagicCased</a>
+      <nav class="nav">
+        <a href="#tienda">Tienda</a>
+        <a href="#contacto">Contacto</a>
+        <button id="openCart" class="icon-btn" aria-label="Abrir carrito" title="Carrito">
+          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.45A1.99 1.99 0 0 0 10 19h10v-2H10.42a.25.25 0 0 1-.22-.37L11 14h6a2 2 0 0 0 1.8-1.1l3.58-7.16A1 1 0 0 0 21.5 4h-14.3l-.2-.4A2 2 0 0 0 5.2 3H2v2h2.2l3.1 6.2-.95 1.73A2 2 0 0 0 8 16h12v-2H8.76l.9-1.63L7 6z"/>
+          </svg>
+          <span id="cartCount" class="badge" aria-live="polite">0</span>
+        </button>
+      </nav>
+    </div>
   </header>
 
   <main>
@@ -49,312 +55,12 @@
           <option value="priceAsc">Precio: menor a mayor</option>
           <option value="priceDesc">Precio: mayor a menor</option>
         </select>
+        <span id="sortLabel" class="muted" aria-live="polite">Ordenado: popular</span>
       </div>
 
       
 
-      <!-- Catálogo estático (recuadros de venta) -->
-<div class="grid" aria-label="Catálogo">
-  <!-- 1) Woven naranja -->
-  <article class="card">
-    <div class="thumb">
-      <img src="assets/orangeTechWovenCase.png"
-           alt="Funda Woven Tech color naranja para iPhone"
-           loading="lazy" decoding="async">
-      <span class="badge-tag">Nuevo</span>
-    </div>
-    <div class="card-body">
-      <h3>Funda Woven Tech – Naranja</h3>
-      <p>Textil técnico con protección reforzada.</p>
-      <div class="meta">
-        <span class="price">Desde $249</span>
-        <span class="muted">Varios modelos</span>
-      </div>
-      <div class="actions">
-        <a class="btn"
-           href="https://wa.me/528443287544?text=Quiero%20la%20Funda%20Woven%20Tech%20Naranja"
-           target="_blank" rel="noopener noreferrer"
-           aria-label="Comprar por WhatsApp Funda Woven Tech Naranja">Comprar por WhatsApp</a>
-        <a class="link" href="#tienda">Ver más</a>
-      </div>
-    </div>
-  </article>
-
-  <!-- 2) Silicona negra -->
-  <article class="card">
-    <div class="thumb">
-      <img src="assets/black_iphone_case.png"
-           alt="Funda de silicona negra para iPhone"
-           loading="lazy" decoding="async">
-    </div>
-    <div class="card-body">
-      <h3>Funda Silicona – Negra</h3>
-      <p>Tacto suave, agarre antideslizante.</p>
-      <div class="meta">
-        <span class="price">Desde $199</span>
-        <span class="muted">Varios modelos</span>
-      </div>
-      <div class="actions">
-        <a class="btn"
-           href="https://wa.me/528443287544?text=Quiero%20la%20Funda%20de%20Silicona%20Negra"
-           target="_blank" rel="noopener noreferrer"
-           aria-label="Comprar por WhatsApp Funda de Silicona Negra">Comprar por WhatsApp</a>
-        <a class="link" href="#tienda">Ver más</a>
-      </div>
-    </div>
-  </article>
-
-  <!-- 3) Base blanca personalizable -->
-  <article class="card">
-    <div class="thumb">
-      <img src="assets/iphoneWhiteCase.png"
-           alt="Funda blanca personalizable para iPhone"
-           loading="lazy" decoding="async">
-    </div>
-    <div class="card-body">
-      <h3>Funda Blanca Personalizable</h3>
-      <p>Ideal para nombres, logos o diseños.</p>
-      <div class="meta">
-        <span class="price">Desde $229</span>
-        <span class="muted">Varios modelos</span>
-      </div>
-      <div class="actions">
-        <a class="btn"
-           href="https://wa.me/528443287544?text=Quiero%20la%20Funda%20Blanca%20Personalizable"
-           target="_blank" rel="noopener noreferrer"
-           aria-label="Comprar por WhatsApp Funda Blanca Personalizable">Comprar por WhatsApp</a>
-        <a class="link" href="#tienda">Ver más</a>
-      </div>
-    </div>
-  </article>
-
-  <!-- 4) Espejo cromada -->
-  <article class="card">
-    <div class="thumb">
-      <img src="assets/mirrorCase.png"
-           alt="Funda espejo cromada para iPhone"
-           loading="lazy" decoding="async">
-    </div>
-    <div class="card-body">
-      <h3>Funda Espejo Cromada</h3>
-      <p>Acabado espejo, marco metálico.</p>
-      <div class="meta">
-        <span class="price">Desde $269</span>
-        <span class="muted">Varios modelos</span>
-      </div>
-      <div class="actions">
-        <a class="btn"
-           href="https://wa.me/528443287544?text=Quiero%20la%20Funda%20Espejo%20Cromada"
-           target="_blank" rel="noopener noreferrer"
-           aria-label="Comprar por WhatsApp Funda Espejo Cromada">Comprar por WhatsApp</a>
-        <a class="link" href="#tienda">Ver más</a>
-      </div>
-    </div>
-  </article>
-
-  <!-- 5) Woven azul -->
-  <article class="card">
-    <div class="thumb">
-      <img src="assets/techWovenCase.png"
-           alt="Funda Woven Tech azul para iPhone"
-           loading="lazy" decoding="async">
-    </div>
-    <div class="card-body">
-      <h3>Funda Woven Tech – Azul</h3>
-      <p>Textil premium, bordes elevados.</p>
-      <div class="meta">
-        <span class="price">Desde $249</span>
-        <span class="muted">Varios modelos</span>
-      </div>
-      <div class="actions">
-        <a class="btn"
-           href="https://wa.me/528443287544?text=Quiero%20la%20Funda%20Woven%20Tech%20Azul"
-           target="_blank" rel="noopener noreferrer"
-           aria-label="Comprar por WhatsApp Funda Woven Tech Azul">Comprar por WhatsApp</a>
-        <a class="link" href="#tienda">Ver más</a>
-      </div>
-    </div>
-  </article>
-
-  <!-- 6) Transparente antigolpes -->
-  <article class="card">
-    <div class="thumb">
-      <img src="assets/TransparentCase.png"
-           alt="Funda transparente antigolpes para iPhone"
-           loading="lazy" decoding="async">
-      <span class="badge-tag">Top ventas</span>
-    </div>
-    <div class="card-body">
-      <h3>Funda Transparente Antigolpes</h3>
-      <p>Protección 360°, anti‑amarilleo.</p>
-      <div class="meta">
-        <span class="price">Desde $219</span>
-        <span class="muted">Varios modelos</span>
-      </div>
-      <div class="actions">
-        <a class="btn"
-           href="https://wa.me/528443287544?text=Quiero%20la%20Funda%20Transparente%20Antigolpes"
-           target="_blank" rel="noopener noreferrer"
-           aria-label="Comprar por WhatsApp Funda Transparente Antigolpes">Comprar por WhatsApp</a>
-        <a class="link" href="#tienda">Ver más</a>
-      </div>
-    </div>
-  </article>
-</div>
-
-
-    <!-- Catálogo estático (recuadros de venta) -->
-<div class="grid" aria-label="Catálogo">
-  <!-- 1) Woven naranja -->
-  <article class="card">
-    <div class="thumb">
-      <img src="assets/orangeTechWovenCase.png"
-           alt="Funda Woven Tech color naranja para iPhone"
-           loading="lazy" decoding="async">
-      <span class="badge-tag">Nuevo</span>
-    </div>
-    <div class="card-body">
-      <h3>Funda Woven Tech – Naranja</h3>
-      <p>Textil técnico con protección reforzada.</p>
-      <div class="meta">
-        <span class="price">Desde $249</span>
-        <span class="muted">Varios modelos</span>
-      </div>
-      <div class="actions">
-        <a class="btn"
-           href="https://wa.me/528443287544?text=Quiero%20la%20Funda%20Woven%20Tech%20Naranja"
-           target="_blank" rel="noopener noreferrer"
-           aria-label="Comprar por WhatsApp Funda Woven Tech Naranja">Comprar por WhatsApp</a>
-        <a class="link" href="#tienda">Ver más</a>
-      </div>
-    </div>
-  </article>
-
-  <!-- 2) Silicona negra -->
-  <article class="card">
-    <div class="thumb">
-      <img src="assets/black_iphone_case.png"
-           alt="Funda de silicona negra para iPhone"
-           loading="lazy" decoding="async">
-    </div>
-    <div class="card-body">
-      <h3>Funda Silicona – Negra</h3>
-      <p>Tacto suave, agarre antideslizante.</p>
-      <div class="meta">
-        <span class="price">Desde $199</span>
-        <span class="muted">Varios modelos</span>
-      </div>
-      <div class="actions">
-        <a class="btn"
-           href="https://wa.me/528443287544?text=Quiero%20la%20Funda%20de%20Silicona%20Negra"
-           target="_blank" rel="noopener noreferrer"
-           aria-label="Comprar por WhatsApp Funda de Silicona Negra">Comprar por WhatsApp</a>
-        <a class="link" href="#tienda">Ver más</a>
-      </div>
-    </div>
-  </article>
-
-  <!-- 3) Base blanca personalizable -->
-  <article class="card">
-    <div class="thumb">
-      <img src="assets/iphoneWhiteCase.png"
-           alt="Funda blanca personalizable para iPhone"
-           loading="lazy" decoding="async">
-    </div>
-    <div class="card-body">
-      <h3>Funda Blanca Personalizable</h3>
-      <p>Ideal para nombres, logos o diseños.</p>
-      <div class="meta">
-        <span class="price">Desde $229</span>
-        <span class="muted">Varios modelos</span>
-      </div>
-      <div class="actions">
-        <a class="btn"
-           href="https://wa.me/528443287544?text=Quiero%20la%20Funda%20Blanca%20Personalizable"
-           target="_blank" rel="noopener noreferrer"
-           aria-label="Comprar por WhatsApp Funda Blanca Personalizable">Comprar por WhatsApp</a>
-        <a class="link" href="#tienda">Ver más</a>
-      </div>
-    </div>
-  </article>
-
-  <!-- 4) Espejo cromada -->
-  <article class="card">
-    <div class="thumb">
-      <img src="assets/mirrorCase.png"
-           alt="Funda espejo cromada para iPhone"
-           loading="lazy" decoding="async">
-    </div>
-    <div class="card-body">
-      <h3>Funda Espejo Cromada</h3>
-      <p>Acabado espejo, marco metálico.</p>
-      <div class="meta">
-        <span class="price">Desde $269</span>
-        <span class="muted">Varios modelos</span>
-      </div>
-      <div class="actions">
-        <a class="btn"
-           href="https://wa.me/528443287544?text=Quiero%20la%20Funda%20Espejo%20Cromada"
-           target="_blank" rel="noopener noreferrer"
-           aria-label="Comprar por WhatsApp Funda Espejo Cromada">Comprar por WhatsApp</a>
-        <a class="link" href="#tienda">Ver más</a>
-      </div>
-    </div>
-  </article>
-
-  <!-- 5) Woven azul -->
-  <article class="card">
-    <div class="thumb">
-      <img src="assets/techWovenCase.png"
-           alt="Funda Woven Tech azul para iPhone"
-           loading="lazy" decoding="async">
-    </div>
-    <div class="card-body">
-      <h3>Funda Woven Tech – Azul</h3>
-      <p>Textil premium, bordes elevados.</p>
-      <div class="meta">
-        <span class="price">Desde $249</span>
-        <span class="muted">Varios modelos</span>
-      </div>
-      <div class="actions">
-        <a class="btn"
-           href="https://wa.me/528443287544?text=Quiero%20la%20Funda%20Woven%20Tech%20Azul"
-           target="_blank" rel="noopener noreferrer"
-           aria-label="Comprar por WhatsApp Funda Woven Tech Azul">Comprar por WhatsApp</a>
-        <a class="link" href="#tienda">Ver más</a>
-      </div>
-    </div>
-  </article>
-
-  <!-- 6) Transparente antigolpes -->
-  <article class="card">
-    <div class="thumb">
-      <img src="assets/TransparentCase.png"
-           alt="Funda transparente antigolpes para iPhone"
-           loading="lazy" decoding="async">
-      <span class="badge-tag">Top ventas</span>
-    </div>
-    <div class="card-body">
-      <h3>Funda Transparente Antigolpes</h3>
-      <p>Protección 360°, anti‑amarilleo.</p>
-      <div class="meta">
-        <span class="price">Desde $219</span>
-        <span class="muted">Varios modelos</span>
-      </div>
-      <div class="actions">
-        <a class="btn"
-           href="https://wa.me/528443287544?text=Quiero%20la%20Funda%20Transparente%20Antigolpes"
-           target="_blank" rel="noopener noreferrer"
-           aria-label="Comprar por WhatsApp Funda Transparente Antigolpes">Comprar por WhatsApp</a>
-        <a class="link" href="#tienda">Ver más</a>
-      </div>
-    </div>
-  </article>
-</div>
-
-
-
-
+      <!-- Catálogo dinámico renderizado por JS -->
       <div id="grid" class="grid" aria-live="polite"></div>
       <p id="emptyState" class="muted" hidden>No encontramos resultados. Intenta ajustar la búsqueda o filtros.</p>
     </section>
@@ -364,9 +70,7 @@
       <p>Escríbenos por WhatsApp o Instagram.</p>
       <div class="links">
         <a id="whatsappLink" class="link" href="https://wa.me/528443287544?text=Hola%20quiero%20informaci%C3%B3n%20sobre%20sus%20fundas" target="_blank" rel="noopener noreferrer" aria-label="Abrir chat de WhatsApp">WhatsApp</a>
-        <!-- <a id="whatsappLink" class="link" href="https://wa.me/?text=Hola%20quiero%20informaci%C3%B3n%20sobre%20sus%20fundas" rel="noopener">WhatsApp</a> -->
         <a class="link" href="https://www.instagram.com/magiccased/" target="_blank" rel="noopener noreferrer" aria-label="Abrir perfil en Instagram">Instagram</a>
-        <!-- <a class="link" href="https://www.instagram.com/" target="magiccased/" rel="noopener">Instagram</a> -->
         <a class="link" href="mailto:magiccased@gmail.com">magiccased@gmail.com</a>
       </div>
     </section>
