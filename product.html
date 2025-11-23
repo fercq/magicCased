@@ -71,12 +71,15 @@
           <span id="totalPrice" class="total-price"></span>
         </div>
 
-        <button id="addToCartBtn" class="btn-primary btn-large">
-          <svg class="icon-cart" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.45A1.99 1.99 0 0 0 10 19h10v-2H10.42a.25.25 0 0 1-.22-.37L11 14h6a2 2 0 0 0 1.8-1.1l3.58-7.16A1 1 0 0 0 21.5 4h-14.3l-.2-.4A2 2 0 0 0 5.2 3H2v2h2.2l3.1 6.2-.95 1.73A2 2 0 0 0 8 16h12v-2H8.76l.9-1.63L7 6z" fill="currentColor"/>
-          </svg>
-          Añadir al carrito
-        </button>
+        <div class="product-actions">
+          <button id="addToCartBtn" class="btn-add-cart">
+            <svg class="icon-cart" width="20" height="20" viewBox="0 0 24 24">
+              <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
+            </svg>
+            Añadir
+          </button>
+          <button id="buyNowBtn" class="btn-buy-now">Comprar ahora</button>
+        </div>
       </div>
     </div>
   </main>

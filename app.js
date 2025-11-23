@@ -214,9 +214,13 @@ function renderCart() {
 }
 
 function cartItemHTML(it) {
+  const product = PRODUCTS.find(p => p.id === it.id);
+  const imageHTML = product && product.image 
+    ? `<img src="assets/${product.image}" alt="${product.imageAlt || product.name}" loading="lazy">`
+    : '';
   return `
   <div class="cart-item">
-    <div class="cart-thumb" aria-hidden="true"></div>
+    <div class="cart-thumb" aria-hidden="true">${imageHTML}</div>
     <div>
       <h4>${it.name}</h4>
       <div class="muted" style="font-size:16px">Modelo: ${it.model}</div>
@@ -240,7 +244,7 @@ function onAddToCart(e) {
   const p = PRODUCTS.find(x => x.id === id);
   const select = $(`#m-${id}`);
   const model = select ? select.value : getDefaultModel(p);
-  addItemToCart(id, model, 1);
+  addItemToCart(id, model, 1, { openDrawer: false });
 }
 
 function changeQty(key, delta) {

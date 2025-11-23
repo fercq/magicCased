@@ -107,7 +107,32 @@
         return;
       }
       const qty = qtyInput ? clampQty(qtyInput.value) : 1;
-      addItemToCart(product.id, selectedModel, qty);
+      addItemToCart(product.id, selectedModel, qty, { openDrawer: false });
+    });
+  }
+
+  const buyNowBtn = document.getElementById("buyNowBtn");
+  if (buyNowBtn) {
+    buyNowBtn.addEventListener("click", () => {
+      if (!modelSelect) return;
+      const selectedModel = modelSelect.value || defaultModel || (models[0] || "");
+      if (!selectedModel) {
+        modelSelect.focus();
+        modelSelect.classList.add("input-error");
+        setTimeout(() => modelSelect.classList.remove("input-error"), 1200);
+        return;
+      }
+      const qty = qtyInput ? clampQty(qtyInput.value) : 1;
+      
+      // Añadir al carrito
+      addItemToCart(product.id, selectedModel, qty, { openDrawer: false });
+      
+      // Construir mensaje de WhatsApp con este producto
+      const itemLine = `• ${product.name} (${selectedModel}) x${qty} — ${money(product.price * qty)}`;
+      const total = product.price * qty;
+      const msg = `Hola, quiero hacer este pedido:\n${itemLine}\n\nTotal: ${money(total)}\n\nNombre:\nDirección de envío:\nMétodo de pago:\n`;
+      const base = STORE.whatsappNumber ? `https://wa.me/${STORE.whatsappNumber}?text=` : `https://wa.me/?text=`;
+      window.open(base + encodeURIComponent(msg), "_blank");
     });
   }
 
