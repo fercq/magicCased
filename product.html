@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,shrink-to-fit=no" />
   <title>Producto - MagicCased</title>
   <meta name="description" content="Detalle del producto" />
   <link rel="icon" href="assets/favicon.svg" />
@@ -17,7 +17,7 @@
       <a class="brand" href="index.html" aria-label="Volver a inicio">Magic Cased</a>
       <nav class="nav">
         <a href="index.html#tienda">Tienda</a>
-        <a href="index.html#contacto">Contacto</a>
+        <a href="#contacto">Contacto</a>
         <button id="openCart" class="icon-btn" aria-label="Abrir carrito" title="Carrito">
           <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.45A1.99 1.99 0 0 0 10 19h10v-2H10.42a.25.25 0 0 1-.22-.37L11 14h6a2 2 0 0 0 1.8-1.1l3.58-7.16A1 1 0 0 0 21.5 4h-14.3l-.2-.4A2 2 0 0 0 5.2 3H2v2h2.2l3.1 6.2-.95 1.73A2 2 0 0 0 8 16h12v-2H8.76l.9-1.63L7 6z"/>
@@ -84,6 +84,18 @@
     </div>
   </main>
 
+  
+
+  <section id="contacto" class="container contacto">
+      <h2>¿Necesitas ayuda?</h2>
+      <p>Escríbenos por WhatsApp o Instagram.</p>
+      <div class="links">
+        <a id="whatsappLink" class="link" href="https://wa.me/528443287544?text=Hola%20quiero%20informaci%C3%B3n%20sobre%20sus%20fundas" target="_blank" rel="noopener noreferrer" aria-label="Abrir chat de WhatsApp">WhatsApp</a>
+        <a class="link" href="https://www.instagram.com/magiccased/" target="_blank" rel="noopener noreferrer" aria-label="Abrir perfil en Instagram">Instagram</a>
+        <a class="link" href="mailto:magiccased@gmail.com">magiccased@gmail.com</a>
+      </div>
+    </section>
+
   <footer class="site-footer container">
     <small>© <span id="year"></span> MagicCased. Envío gratis en pedidos desde $800. Hecho con ❤️</small>
   </footer>
@@ -93,7 +105,7 @@
     <div class="drawer__panel">
       <header class="drawer__header">
         <h3>Tu carrito</h3>
-        <button id="closeCart" class="icon-btn" aria-label="Cerrar carrito">✕</button>
+        <button id="closeCart" class="close-btn" aria-label="Cerrar carrito">✕</button>
       </header>
       <div id="cartList" class="cart-list"></div>
       <div class="cart-summary">

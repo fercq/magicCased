@@ -1,11 +1,11 @@
 :root {
     /* page background: bone-white, header will be black */
-    --bg: #20b329; /* bone / off-white */
+    --bg: #fffefede; /* bone / off-white */
     --header-bg: #222222;
     --header-text: #fffffffa;
-    --text: #ffffffdd;
-    --muted: #ffffff;
-    --card: #af2e2e;
+    --text: #202020dd;
+    --muted: #171717e9
+    --card: #c5c5c5;
     --accent: #841313; /* cambia este color para tu marca */
     --radius: 12px;
     --shadow: 0 4px 4px rgba(208, 22, 22, 0), 0 8px 14px rgba(0,0,0,.06);
@@ -17,7 +17,7 @@
       --text: #000000;
       --muted: #171717e9;
       --card: #ffffff;
-      --accent: #a39494;
+      --accent: #841313;
     }
   }
   
@@ -85,7 +85,11 @@
     .brand { font-size: 18px; }
     .nav a { font-size: 16px; padding: 4px 6px; }
     .icon-btn svg { width: 28px; height: 26px; }
+    /* Respect safe-area for header inner container on iPhone */
+    .site-header .container { padding-left: max(12px, env(safe-area-inset-left)); padding-right: max(12px, env(safe-area-inset-right)); }
   }
+  /* Prevent anchor links from hiding content under the sticky header */
+  #contacto, .back-link { scroll-margin-top: calc(64px + env(safe-area-inset-top)); }
   
   .hero { padding: 40px 24px 40px; text-align: center; }
   .hero-banner { width: 100%; height: auto; border-radius: var(--radius); margin-bottom: 32px; display: block; object-fit: cover; box-shadow: var(--shadow); max-width: 100%; }
@@ -245,9 +249,13 @@
   .contacto .link { text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 2px; }
   
   @media (max-width: 580px) {
-    .contacto { padding: 24px 0; }
-    .contacto h2 { font-size: 22px; }
+    /* Ensure the contact section respects safe area for iPhone notches and doesn't clip left/right */
+    .contacto { padding: 20px 0; padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); box-sizing: border-box; }
+    .contacto h2 { font-size: 20px; }
     .contacto p { font-size: 14px; }
+    /* Links in the contact section should shrink and wrap correctly without overflowing */
+    .contacto .links { justify-content: flex-start; align-items: center; gap: 12px; }
+    .contacto .links a { display: inline-block; white-space: normal; word-break: break-word; overflow-wrap: break-word; max-width: 100%; min-width: 0; }
   }
   
   .site-footer { 
@@ -298,10 +306,18 @@
     transition: background 0.2s ease, transform 0.1s ease;
     padding: 0;
     flex-shrink: 0;
+    position: relative;
+    z-index: 10002; /* ensure it sits above header and other page elements */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    border: 1px solid rgba(0,0,0,0.12);
   }
   .close-btn:hover { 
     background: rgba(0, 0, 0, 0.2); 
     transform: scale(1.08);
+  }
+  .close-btn:focus {
+    outline: 3px solid rgba(0,0,0,0.16);
+    outline-offset: 2px;
   }
   .close-btn:active {
     transform: scale(0.92);
@@ -430,6 +446,40 @@
     .btn-buy-now { height: 44px; font-size: 13px; padding: 0 8px; }
     .product-info h1 { font-size: clamp(18px, 6vw, 22px); }
   }
+  /* Mid-size iPhones (e.g., iPhone 12/13/14/15/16 Plus – ~428–430px) */
+  @media (max-width: 440px) {
+    /* Make sure page doesn't overflow horizontally */
+    body { overflow-x: hidden; }
+    /* Increase side padding to be "fair" and respect screen curvature */
+    .container, .contacto { 
+      padding-left: max(20px, env(safe-area-inset-left)); 
+      padding-right: max(20px, env(safe-area-inset-right)); 
+    }
+    .site-header .container { padding-left: 16px; padding-right: 16px; }
+    
+    /* Relax button constraints for this width */
+    .product-actions { gap: 12px; }
+    .btn-add-cart { 
+      flex: 0 0 auto; 
+      min-width: 80px;
+      height: 48px; 
+      font-size: 14px; 
+    }
+    .btn-buy-now { 
+      height: 48px; 
+      font-size: 15px; 
+      padding: 0 16px; 
+      box-shadow: 0 4px 8px rgba(0,200,83,0.25); 
+    }
+    
+    .badge { right: -6px; }
+    /* Reduce big paddings that push content beyond viewport */
+    .product-gallery { padding: 16px; }
+    .main-image { max-height: 380px; }
+    .hero { padding: 18px 16px 24px; }
+    /* Stack contact links in a column to avoid horizontal clipping on narrow devices */
+    .contacto .links { flex-direction: column; align-items: flex-start; gap: 8px; }
+  }
 .btn-primary { background: var(--text); color: var(--bg); border: none; border-radius: 999px; padding: 16px 24px; font-size: 18px; font-weight: 700; cursor: pointer; transition: transform .1s ease, filter .15s ease; display: inline-flex; align-items: center; justify-content: center; gap: 12px; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
 .btn-primary:hover { filter: brightness(0.95); transform: translateY(-1px); }
 .btn-primary:active { transform: translateY(1px); }
@@ -504,4 +554,8 @@
     padding: 14px 18px; 
     font-size: 16px; 
   }
+}
+
+@media (max-width: 900px) {
+  .contacto { padding-left: max(20px, env(safe-area-inset-left)); padding-right: max(20px, env(safe-area-inset-right)); }
 }
