@@ -181,7 +181,6 @@ function cardHTML(p) {
           <span class="add-label">Add</span>
         </button>
       </div>
-      <a class="details-link" href="${detailUrl}" aria-label="Ver detalles de ${p.name}">Ver detalles →</a>
     </div>
   </article>`;
 }
