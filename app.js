@@ -161,7 +161,6 @@ function cardHTML(p) {
   return `
   <article class="card" data-id="${p.id}">
     <div class="thumb">
-      ${p.tag ? `<span class="badge-tag">${p.tag}</span>` : ""}
       <a class="thumb-link" href="${detailUrl}">
         ${p.image ? `<img src="assets/${p.image}" alt="${p.imageAlt}" loading="lazy" decoding="async">` : ''}
       </a>
