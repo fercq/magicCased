@@ -7,8 +7,8 @@
     --muted: #ffffff;
     --card: #af2e2e;
     --accent: #841313; /* cambia este color para tu marca */
-    --radius: 22px;
-    --shadow: 0 4px 4px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.06);
+    --radius: 12px;
+    --shadow: 0 4px 4px rgba(208, 22, 22, 0), 0 8px 14px rgba(0,0,0,.06);
   }
   
   @media (prefers-color-scheme: dark) {
@@ -32,18 +32,34 @@
     text-rendering: optimizeLegibility;
   }
   
-  .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0px; }
   /* Header: full width bar; inner .container arranges brand/nav */
-  .site-header { background: var(--header-bg); color: var(--header-text); padding: 12px 0; }
-  .site-header .container { display: flex; align-items: center; gap: 16px; }
-  .brand { font-weight: 700; letter-spacing: .08em; text-decoration: none; color: var(--header-text); font-size: 45px; font-family: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, 'Noto Sans', Helvetica, Arial; }
+  .site-header { background: var(--header-bg); color: var(--header-text); padding: 8px 0; }
+  .site-header .container { display: flex; align-items: center; gap: 8px; }
+  .brand { font-weight: 700; letter-spacing: .08em; text-decoration: none; color: var(--header-text); font-size: 22px; font-family: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, 'Noto Sans', Helvetica, Arial; }
   .nav { display: flex; align-items: center; gap: 16px; width: 100%; }
   /* keep the two links on the left; push the cart button to the far right */
   .nav .icon-btn { margin-left: auto; }
-  .nav a { color: var(--header-text); opacity: .9; text-decoration: none; }
-  .nav a:hover { opacity: 1; }
+  .nav a {
+    color: var(--header-text);
+    opacity: .95;
+    text-decoration: none;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: background .15s ease, color .15s ease, opacity .15s ease;
+  }
+  .nav a:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.099);
+    color: var(--header-text);
+  }
   .icon-btn { background: transparent; border: 1px solid transparent; padding: 8px 10px; border-radius: 999px; cursor: pointer; position: relative; color: var(--header-text); }
   .icon-btn:hover { background: rgba(255,255,255,.06); }
+  /* header cart icon white and larger */
+  .icon-btn svg { fill: white; stroke: white; width: 36px; height: 32px; }
   .badge { position: absolute; top: -4px; right: -4px; background: var(--accent); color: var(--bg); border-radius: 999px; padding: 2px 5px; font-size: 12px; }
   
   .hero { padding: 72px 24px 40px; text-align: center; }
@@ -58,7 +74,7 @@
   
   .toolbar {
     display: grid; gap: 10px; grid-template-columns: 1fr 180px 180px;
-    position: sticky; top: 0; background: var(--bg); padding: 8px 0 16px; z-index: 5;
+    position: sticky; top: 0; background: var(--bg); padding: 8px 0 16px; z-index: 10;
   }
   .toolbar input, .toolbar select {
     width: 100%; padding: 12px 14px; border-radius: 999px; border: 1px solid #e5e7eb; background: transparent; color: var(--text);
@@ -86,8 +102,22 @@
   .card .meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 4px; }
   .price { font-weight: 700; }
   .card .actions { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 10px; }
+  /* Style for the model select inside product cards (default model text size) */
+  .card .actions select {
+    font-size: 15px; /* change this value to increase/decrease the default model text size */
+    line-height: 1.2;
+    padding: 8px 10px;
+    border-radius: 8px;
+    color: var(--text);
+    background: transparent;
+    border: 1px solid rgba(20, 20, 20, 0.536);
+  }
   .btn { padding: 10px 12px; border-radius: 10px; border: 1px solid var(--text); background: transparent; color: var(--text); cursor: pointer; }
   .btn:hover { background: rgba(127,127,127,.08); }
+  /* Add button with cart icon styling */
+  .btn.add { display: inline-flex; align-items: center; gap: 8px; padding: 8px 10px; }
+  .btn.add .icon-cart { width: 18px; height: 18px; display: block; }
+  .btn.add .add-label { font-weight: 600; font-size: 16px; }
   .link { background: transparent; border: 0; color: var(--text); text-decoration: underline; cursor: pointer; padding: 8px 0; }
   .link.full { width: 100%; text-align: center; }
   .muted { color: var(--muted); }
@@ -97,12 +127,13 @@
   
   .site-footer { margin-top: 40px; padding-bottom: 40px; color: var(--muted); }
   
-  .drawer { position: fixed; inset: 0; display: none; }
+  /* Cart drawer: high z-index to appear above toolbar and backdrop */
+  .drawer { position: fixed; inset: 0; display: none; z-index: 100; }
   .drawer[aria-hidden="false"] { display: grid; grid-template-columns: 1fr; }
-  .drawer__backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.35); border: 0; }
+  .drawer__backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.35); border: 0; z-index: 50; }
   .drawer__panel {
     position: relative; margin-left: auto; height: 100%; width: min(440px, 100%); background: var(--bg);
-    box-shadow: -10px 0 30px rgba(0,0,0,.2); display: grid; grid-template-rows: auto 1fr auto;
+    box-shadow: -10px 0 30px rgba(0,0,0,.2); display: grid; grid-template-rows: auto 1fr auto; z-index: 101;
   }
   .drawer__header { display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid #e5e7eb; }
   .cart-list { padding: 16px; display: grid; gap: 14px; overflow: auto; }
@@ -133,7 +164,7 @@
 
 /* Móvil: mantenemos 2 columnas (antes era 1) */
 @media (max-width: 580px) { 
-  .grid { grid-template-columns: repeat(3, 1fr); }
+  .grid { grid-template-columns: repeat(2, 1fr); }
 }
 
   

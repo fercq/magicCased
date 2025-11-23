@@ -11,8 +11,17 @@ const STORE = {
 const ALL_MODELS = [
   "iPhone 11", "iPhone 11 Pro", "iPhone 11 Pro Max", "iPhone 12", "iPhone 12 Pro", "iPhone 12 Pro Max", "iPhone 13", "iPhone 13 Pro", "iPhone 13 Pro Max",
   "iPhone 14", "iPhone 14 Pro", "iPhone 14 Pro Max", "iPhone 15", "IPhone 15 Pro", "iPhone 15 Pro Max", "iPhone 16", "iPhone 16 Pro", "iPhone 16 Pro Max",
-  "iPhone 17", "iPhone 17 Pro", "iPhone  17 Air", "Samsung S22", "Samsung S23", "Samsung S24", "Xiaomi 12", "Samsung A54", "Xiaomi 12"
+  "iPhone 17", "iPhone 17 Pro", "iPhone  17 Air", "iPhone 17 Pro Max", "Samsung S22", "Samsung S23", "Samsung S24", "Xiaomi 12", "Samsung A54", "Xiaomi 12"
 ];
+
+// Modelo por defecto global — puede ser reemplazado por producto usando
+// `defaultModel` en cada objeto de `PRODUCTS` o mediante el mapa
+// `DEFAULT_PRODUCT_MODEL` abajo.
+const DEFAULT_MODEL = "iPhone 17 Pro Max";
+
+// Opcional: asignación por producto (id -> modelo). Útil para centralizar
+// defaults sin editar cada entrada de PRODUCTS.
+const DEFAULT_PRODUCT_MODEL = {};
 
 /* Productos de ejemplo: reemplaza por los tuyos */
 const PRODUCTS = [
@@ -31,7 +40,7 @@ const PRODUCTS = [
     name: "Funda Antigolpes",
     price: 34900,
     tag: "top ventas",
-  models: "ALL",
+    models: "ALL",
     description: "Bordes reforzados y esquinas con absorción de impactos.",
     imageAlt: "Funda antigolpes con esquinas reforzadas",
     image: "black_iphone_case.png",
@@ -51,7 +60,7 @@ const PRODUCTS = [
     name: "Funda Mármol",
     price: 29900,
     tag: "edición",
-  models: "ALL",
+    models: "ALL",
     description: "Estampado mármol minimalista, resistente a rayones.",
     imageAlt: "Funda con patrón de mármol",
     image: "mirrorCase.png",
@@ -148,11 +157,15 @@ function cardHTML(p) {
       <p>${p.description}</p>
       <div class="meta">
         <span class="price">${money(p.price)}</span>
-        <span class="muted">${models[0]}${models.length>1?` · +${models.length-1}`:""}</span>
       </div>
       <div class="actions">
         ${modelSelectHTML(p, models)}
-        <button class="btn add" data-id="${p.id}">Añadir</button>
+        <button class="btn add" data-id="${p.id}" aria-label="Añadir ${p.name}">
+          <svg class="icon-cart" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.45A1.99 1.99 0 0 0 10 19h10v-2H10.42a.25.25 0 0 1-.22-.37L11 14h6a2 2 0 0 0 1.8-1.1l3.58-7.16A1 1 0 0 0 21.5 4h-14.3l-.2-.4A2 2 0 0 0 5.2 3H2v2h2.2l3.1 6.2-.95 1.73A2 2 0 0 0 8 16h12v-2H8.76l.9-1.63L7 6z" fill="currentColor"/>
+          </svg>
+          <span class="add-label">Add</span>
+        </button>
       </div>
     </div>
   </article>`;
@@ -161,7 +174,16 @@ function cardHTML(p) {
 function modelSelectHTML(p, modelsOverride) {
   const id = `m-${p.id}`;
   const models = modelsOverride || getProductModels(p);
-  const options = models.map(m => `<option value="${m}">${m}</option>`).join("");
+  // resolution order for default model:
+  // 1. p.defaultModel (explicit on the product)
+  // 2. DEFAULT_PRODUCT_MODEL[p.id] (centralized per-product map)
+  // 3. DEFAULT_MODEL (global default)
+  // 4. first model in the expanded models list
+  const candidateDefaults = [p && p.defaultModel, DEFAULT_PRODUCT_MODEL[p.id], DEFAULT_MODEL];
+  // pick the first candidate that actually exists in this product's models
+  let chosen = candidateDefaults.find(d => d && models.includes(d));
+  if (!chosen) chosen = models && models.length ? models[0] : '';
+  const options = models.map((m, idx) => `<option value="${m}" ${m === chosen ? 'selected' : (idx === 0 && !chosen ? 'selected' : '')}>${m}</option>`).join("");
   return `<select id="${id}" aria-label="Seleccionar modelo">${options}</select>`;
 }
 
@@ -184,7 +206,7 @@ function cartItemHTML(it) {
     <div class="cart-thumb" aria-hidden="true"></div>
     <div>
       <h4>${it.name}</h4>
-      <div class="muted" style="font-size:13px">Modelo: ${it.model}</div>
+      <div class="muted" style="font-size:16px">Modelo: ${it.model}</div>
       <div class="muted" style="font-size:13px">${money(it.price)} c/u</div>
       <div class="qty" style="margin-top:6px">
         <button class="dec" data-id="${it.key}" aria-label="Disminuir cantidad">−</button>
