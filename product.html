@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Producto - MagicCased</title>
+  <meta name="description" content="Detalle del producto" />
+  <link rel="icon" href="assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="index.html" aria-label="Volver a inicio">Magic Cased</a>
+      <nav class="nav">
+        <a href="index.html#tienda">Tienda</a>
+        <a href="index.html#contacto">Contacto</a>
+        <button id="openCart" class="icon-btn" aria-label="Abrir carrito" title="Carrito">
+          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.45A1.99 1.99 0 0 0 10 19h10v-2H10.42a.25.25 0 0 1-.22-.37L11 14h6a2 2 0 0 0 1.8-1.1l3.58-7.16A1 1 0 0 0 21.5 4h-14.3l-.2-.4A2 2 0 0 0 5.2 3H2v2h2.2l3.1 6.2-.95 1.73A2 2 0 0 0 8 16h12v-2H8.76l.9-1.63L7 6z"/>
+          </svg>
+          <span id="cartCount" class="badge" aria-live="polite">0</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="product-page container">
+    <a href="index.html" class="back-link">← Volver a la tienda</a>
+    
+    <div class="product-detail">
+      <div class="product-gallery">
+        <div class="main-image-container">
+          <img id="mainImage" src="" alt="" class="main-image">
+          <span id="productTag" class="badge-tag-large"></span>
+        </div>
+      </div>
+
+      <div class="product-info">
+        <h1 id="productName"></h1>
+        <p id="productDescription" class="product-description"></p>
+        
+        <div class="price-section">
+          <span class="price-label">Precio:</span>
+          <span id="productPrice" class="price-large"></span>
+        </div>
+
+        <div class="options-section">
+          <div class="option-group">
+            <label for="productModel">Modelo de celular:</label>
+            <select id="productModel" class="product-select">
+              <option value="">Selecciona un modelo</option>
+            </select>
+          </div>
+
+          <div class="option-group">
+            <label for="productQty">Cantidad:</label>
+            <div class="qty-selector">
+              <button id="qtyMinus" class="qty-btn" aria-label="Disminuir cantidad">−</button>
+              <input type="number" id="productQty" value="1" min="1" max="99" class="qty-input" readonly>
+              <button id="qtyPlus" class="qty-btn" aria-label="Aumentar cantidad">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="total-section">
+          <span class="total-label">Total:</span>
+          <span id="totalPrice" class="total-price"></span>
+        </div>
+
+        <button id="addToCartBtn" class="btn-primary btn-large">
+          <svg class="icon-cart" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.45A1.99 1.99 0 0 0 10 19h10v-2H10.42a.25.25 0 0 1-.22-.37L11 14h6a2 2 0 0 0 1.8-1.1l3.58-7.16A1 1 0 0 0 21.5 4h-14.3l-.2-.4A2 2 0 0 0 5.2 3H2v2h2.2l3.1 6.2-.95 1.73A2 2 0 0 0 8 16h12v-2H8.76l.9-1.63L7 6z" fill="currentColor"/>
+          </svg>
+          Añadir al carrito
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer container">
+    <small>© <span id="year"></span> MagicCased. Envío gratis en pedidos desde $800. Hecho con ❤️</small>
+  </footer>
+
+  <!-- Carrito (drawer) - mismo que en index.html -->
+  <div id="drawer" class="drawer" aria-hidden="true" role="dialog" aria-label="Carrito">
+    <div class="drawer__panel">
+      <header class="drawer__header">
+        <h3>Tu carrito</h3>
+        <button id="closeCart" class="icon-btn" aria-label="Cerrar carrito">✕</button>
+      </header>
+      <div id="cartList" class="cart-list"></div>
+      <div class="cart-summary">
+        <div class="row"><span>Subtotal</span><strong id="cartSubtotal">$0</strong></div>
+        <div class="row"><span>Envío</span><span class="muted">Se coordina por WhatsApp</span></div>
+        <div class="row total"><span>Total</span><strong id="cartTotal">$0</strong></div>
+        <button id="checkout" class="cta full">Finalizar por WhatsApp</button>
+        <button id="clearCart" class="link full">Vaciar carrito</button>
+      </div>
+    </div>
+    <button id="drawerBackdrop" class="drawer__backdrop" aria-hidden="true" tabindex="-1"></button>
+  </div>
+
+  <script src="app.js"></script>
+  <script src="product.js"></script>
+</body>
+</html>

@@ -108,8 +108,17 @@ function getProductModels(p) {
   return p.models;
 }
 
+function getDefaultModel(p, modelsOverride) {
+  const models = modelsOverride || getProductModels(p) || [];
+  const candidateDefaults = [p && p.defaultModel, DEFAULT_PRODUCT_MODEL[p.id], DEFAULT_MODEL];
+  const chosen = candidateDefaults.find(d => d && models.includes(d));
+  if (chosen) return chosen;
+  return models.length ? models[0] : "";
+}
+
 function renderProducts() {
   const grid = $("#grid");
+  if (!grid) return;
   const q = filters.q.trim().toLowerCase();
   let items = PRODUCTS.filter(p => {
     const models = getProductModels(p);
@@ -131,7 +140,8 @@ function renderProducts() {
     console.log('[renderProducts] sort=', filters.sort, 'prices=', items.map(i => i.price));
   }
   grid.innerHTML = items.map(p => cardHTML(p)).join("");
-  $("#emptyState").hidden = items.length > 0;
+  const emptyState = $("#emptyState");
+  if (emptyState) emptyState.hidden = items.length > 0;
 
   // update sort label if present
   try {
@@ -146,20 +156,24 @@ function renderProducts() {
 
 function cardHTML(p) {
   const models = getProductModels(p);
+  const defaultModel = getDefaultModel(p, models);
+  const detailUrl = `product.html?id=${encodeURIComponent(p.id)}`;
   return `
   <article class="card" data-id="${p.id}">
     <div class="thumb">
-      ${p.image ? `<img src="assets/${p.image}" alt="${p.imageAlt}" loading="lazy" decoding="async">` : ''}
       ${p.tag ? `<span class="badge-tag">${p.tag}</span>` : ""}
+      <a class="thumb-link" href="${detailUrl}">
+        ${p.image ? `<img src="assets/${p.image}" alt="${p.imageAlt}" loading="lazy" decoding="async">` : ''}
+      </a>
     </div>
     <div class="card-body">
-      <h3>${p.name}</h3>
+      <h3><a class="card-link" href="${detailUrl}">${p.name}</a></h3>
       <p>${p.description}</p>
       <div class="meta">
         <span class="price">${money(p.price)}</span>
       </div>
       <div class="actions">
-        ${modelSelectHTML(p, models)}
+        ${modelSelectHTML(p, models, defaultModel)}
         <button class="btn add" data-id="${p.id}" aria-label="Añadir ${p.name}">
           <svg class="icon-cart" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
             <path d="M7 4h-2l-1 2h2l3.6 7.59-1.35 2.45A1.99 1.99 0 0 0 10 19h10v-2H10.42a.25.25 0 0 1-.22-.37L11 14h6a2 2 0 0 0 1.8-1.1l3.58-7.16A1 1 0 0 0 21.5 4h-14.3l-.2-.4A2 2 0 0 0 5.2 3H2v2h2.2l3.1 6.2-.95 1.73A2 2 0 0 0 8 16h12v-2H8.76l.9-1.63L7 6z" fill="currentColor"/>
@@ -167,37 +181,38 @@ function cardHTML(p) {
           <span class="add-label">Add</span>
         </button>
       </div>
+      <a class="details-link" href="${detailUrl}" aria-label="Ver detalles de ${p.name}">Ver detalles →</a>
     </div>
   </article>`;
 }
 
-function modelSelectHTML(p, modelsOverride) {
+function modelSelectHTML(p, modelsOverride, defaultOverride) {
   const id = `m-${p.id}`;
   const models = modelsOverride || getProductModels(p);
-  // resolution order for default model:
-  // 1. p.defaultModel (explicit on the product)
-  // 2. DEFAULT_PRODUCT_MODEL[p.id] (centralized per-product map)
-  // 3. DEFAULT_MODEL (global default)
-  // 4. first model in the expanded models list
-  const candidateDefaults = [p && p.defaultModel, DEFAULT_PRODUCT_MODEL[p.id], DEFAULT_MODEL];
-  // pick the first candidate that actually exists in this product's models
-  let chosen = candidateDefaults.find(d => d && models.includes(d));
-  if (!chosen) chosen = models && models.length ? models[0] : '';
+  const chosen = defaultOverride ?? getDefaultModel(p, models);
   const options = models.map((m, idx) => `<option value="${m}" ${m === chosen ? 'selected' : (idx === 0 && !chosen ? 'selected' : '')}>${m}</option>`).join("");
   return `<select id="${id}" aria-label="Seleccionar modelo">${options}</select>`;
 }
 
 function renderCart() {
-  $("#cartList").innerHTML = cart.length ? cart.map(item => cartItemHTML(item)).join("") : `<p class="muted">Tu carrito está vacío.</p>`;
+  const listEl = $("#cartList");
+  if (listEl) {
+    listEl.innerHTML = cart.length ? cart.map(item => cartItemHTML(item)).join("") : `<p class="muted">Tu carrito está vacío.</p>`;
+  }
   const subtotal = cart.reduce((acc, it) => acc + it.price * it.qty, 0);
-  $("#cartSubtotal").textContent = money(subtotal);
-  $("#cartTotal").textContent = money(subtotal);
-  $("#cartCount").textContent = cart.reduce((acc, it) => acc + it.qty, 0);
+  const subtotalEl = $("#cartSubtotal");
+  if (subtotalEl) subtotalEl.textContent = money(subtotal);
+  const totalEl = $("#cartTotal");
+  if (totalEl) totalEl.textContent = money(subtotal);
+  const countEl = $("#cartCount");
+  if (countEl) countEl.textContent = cart.reduce((acc, it) => acc + it.qty, 0);
 
   // eventos cantidad / remover
-  $$(".qty .inc").forEach(b => b.addEventListener("click", () => changeQty(b.dataset.id, +1)));
-  $$(".qty .dec").forEach(b => b.addEventListener("click", () => changeQty(b.dataset.id, -1)));
-  $$(".remove").forEach(b => b.addEventListener("click", () => removeFromCart(b.dataset.id)));
+  if (listEl) {
+    $$(".qty .inc", listEl).forEach(b => b.addEventListener("click", () => changeQty(b.dataset.id, +1)));
+    $$(".qty .dec", listEl).forEach(b => b.addEventListener("click", () => changeQty(b.dataset.id, -1)));
+    $$(".remove", listEl).forEach(b => b.addEventListener("click", () => removeFromCart(b.dataset.id)));
+  }
 }
 
 function cartItemHTML(it) {
@@ -225,14 +240,9 @@ function cartItemHTML(it) {
 function onAddToCart(e) {
   const id = e.currentTarget.dataset.id;
   const p = PRODUCTS.find(x => x.id === id);
-  const model = $(`#m-${id}`).value;
-  const key = `${id}-${model}`;
-  const existing = cart.find(i => i.key === key);
-  if (existing) existing.qty += 1;
-  else cart.push({ key, id, name: p.name, model, price: p.price, qty: 1 });
-  persist();
-  renderCart();
-  openDrawer(true);
+  const select = $(`#m-${id}`);
+  const model = select ? select.value : getDefaultModel(p);
+  addItemToCart(id, model, 1);
 }
 
 function changeQty(key, delta) {
@@ -248,6 +258,22 @@ function removeFromCart(key) {
   persist(); renderCart();
 }
 
+function addItemToCart(id, model, qty = 1, options = {}) {
+  if (!id || !model || qty <= 0) return null;
+  const product = PRODUCTS.find(x => x.id === id);
+  if (!product) return null;
+  const key = `${id}-${model}`;
+  const existing = cart.find(i => i.key === key);
+  if (existing) existing.qty += qty;
+  else cart.push({ key, id, name: product.name, model, price: product.price, qty });
+  persist();
+  renderCart();
+  if (options.openDrawer !== false) {
+    openDrawer(true);
+  }
+  return cart.find(i => i.key === key);
+}
+
 function persist() {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
@@ -259,49 +285,73 @@ const closeBtn = $("#closeCart");
 const backdrop = $("#drawerBackdrop");
 
 function openDrawer(force) {
+  if (!drawer) return;
   const show = force ?? drawer.getAttribute("aria-hidden") === "true";
   drawer.setAttribute("aria-hidden", show ? "false" : "true");
-  if (show) $("#closeCart").focus();
+  if (show) {
+    const focusTarget = $("#closeCart");
+    if (focusTarget) focusTarget.focus();
+  }
 }
-openBtn.addEventListener("click", () => openDrawer(true));
-closeBtn.addEventListener("click", () => openDrawer(false));
-backdrop.addEventListener("click", () => openDrawer(false));
+if (openBtn) openBtn.addEventListener("click", () => openDrawer(true));
+if (closeBtn) closeBtn.addEventListener("click", () => openDrawer(false));
+if (backdrop) backdrop.addEventListener("click", () => openDrawer(false));
 
 /* ====== Checkout WhatsApp ====== */
-$("#checkout").addEventListener("click", () => {
-  if (!cart.length) return;
-  const lines = cart.map(it => `• ${it.name} (${it.model}) x${it.qty} — ${money(it.price * it.qty)}`);
-  const total = cart.reduce((acc, it) => acc + it.price * it.qty, 0);
-  const msg =
-    `Hola, quiero hacer este pedido:\n${lines.join("\n")}\n\nTotal: ${money(total)}\n` +
-    `Nombre:\nDirección de envío:\nMétodo de pago:\n`;
-  const base = STORE.whatsappNumber ? `https://wa.me/${STORE.whatsappNumber}?text=` : `https://wa.me/?text=`;
-  window.open(base + encodeURIComponent(msg), "_blank");
-});
+const checkoutBtn = $("#checkout");
+if (checkoutBtn) {
+  checkoutBtn.addEventListener("click", () => {
+    if (!cart.length) return;
+    const lines = cart.map(it => `• ${it.name} (${it.model}) x${it.qty} — ${money(it.price * it.qty)}`);
+    const total = cart.reduce((acc, it) => acc + it.price * it.qty, 0);
+    const msg =
+      `Hola, quiero hacer este pedido:\n${lines.join("\n")}\n\nTotal: ${money(total)}\n` +
+      `Nombre:\nDirección de envío:\nMétodo de pago:\n`;
+    const base = STORE.whatsappNumber ? `https://wa.me/${STORE.whatsappNumber}?text=` : `https://wa.me/?text=`;
+    window.open(base + encodeURIComponent(msg), "_blank");
+  });
+}
+
+const clearBtn = $("#clearCart");
+if (clearBtn) {
+  clearBtn.addEventListener("click", () => {
+    if (!cart.length) return;
+    cart = [];
+    persist();
+    renderCart();
+  });
+}
 
 /* ====== Filtros, orden, modelo ====== */
-$("#q").addEventListener("input", e => { filters.q = e.target.value; renderProducts(); });
-$("#sort").addEventListener("change", e => { filters.sort = e.target.value; renderProducts(); });
-$("#filterModel").addEventListener("change", e => { filters.model = e.target.value; renderProducts(); });
+const searchInput = $("#q");
+if (searchInput) searchInput.addEventListener("input", e => { filters.q = e.target.value; renderProducts(); });
+const sortSelect = $("#sort");
+if (sortSelect) sortSelect.addEventListener("change", e => { filters.sort = e.target.value; renderProducts(); });
+const filterModel = $("#filterModel");
+if (filterModel) filterModel.addEventListener("change", e => { filters.model = e.target.value; renderProducts(); });
 
 /* Poblamos select de modelos basado en productos */
 function populateModels() {
-  $("#filterModel").innerHTML = ['<option value="">Modelo (todos)</option>', ...ALL_MODELS.map(m => `<option value="${m}">${m}</option>`)].join("");
+  const filter = $("#filterModel");
+  if (!filter) return;
+  filter.innerHTML = ['<option value="">Modelo (todos)</option>', ...ALL_MODELS.map(m => `<option value="${m}">${m}</option>`)].join("");
 }
 
 /* ====== Init ====== */
 (function init() {
-  $("#year").textContent = new Date().getFullYear();
+  const yearNode = $("#year");
+  if (yearNode) yearNode.textContent = new Date().getFullYear();
   populateModels();
   renderProducts();
   renderCart();
   // “envío gratis” copy dinámico
   if (STORE.freeShippingMin) {
     const footer = document.querySelector(".site-footer small");
-    footer.innerHTML = footer.innerHTML.replace("$800", money(STORE.freeShippingMin));
+    if (footer) footer.innerHTML = footer.innerHTML.replace("$800", money(STORE.freeShippingMin));
   }
   // Link de WhatsApp en sección contacto con número si está configurado
   if (STORE.whatsappNumber) {
-    $("#whatsappLink").href = `https://wa.me/${STORE.whatsappNumber}`;
+    const whats = $("#whatsappLink");
+    if (whats) whats.href = `https://wa.me/${STORE.whatsappNumber}`;
   }
 })();
